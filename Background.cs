@@ -2,5 +2,7 @@ using uwap.GameLibrary;
 
 public class Background : Thing
 {
-    public override ConsoleColor Color => ConsoleColor.White;
+    public override ConsoleColor? BackgroundColor => ConsoleColor.White;
+
+    public override Content? Content => null;
 }

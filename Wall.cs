@@ -1,6 +1,8 @@
 using uwap.GameLibrary;
 
-public class Wall : Thing
+public class Wall : SolidThing
 {
-    public override ConsoleColor Color => ConsoleColor.Red;
+    public override ConsoleColor? BackgroundColor => ConsoleColor.Red;
+
+    public override Content? Content => null;
 }
