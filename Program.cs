@@ -4,6 +4,14 @@
 int width = 15;
 int height = 9;
 
+//Set player position
+int playerX = 0;
+int playerY = 0;
+
+//Set target / player 2 position
+int targetX = 14;
+int targetY = 8;
+
 //Create level object
 Level l1 = new(width, height, new List<Thing>[width, height]);
 
@@ -19,56 +27,38 @@ for (int y = 0; y < l1.Height; y++)
 MovingThing p1, p2;
 if (args.Length > 0 && args[0] == "coop")
 {
-    MultiPlayer mp1 = new(l1, 0, 0);
+    MultiPlayer mp1 = new(l1, playerX, playerY);
     mp1.SetContent(new(ConsoleColor.DarkBlue, "]["));
     p1 = mp1;
-    l1.Fields[0, 0].Add(p1);
-    MultiPlayer mp2 = new(l1, width-1, height-1);
+    l1.Fields[playerX, playerY].Add(p1);
+    MultiPlayer mp2 = new(l1, targetX, targetY);
     mp2.SetContent(new(ConsoleColor.DarkYellow, "]["));
     p2 = mp2;
-    l1.Fields[width-1, height-1].Add(p2);
+    l1.Fields[targetX, targetY].Add(p2);
 }
 else
 {
-    p1 = new Player(l1, 0, 0);
-    l1.Fields[0, 0].Add(p1);
+    p1 = new Player(l1, playerX, playerY);
+    l1.Fields[playerX, playerY].Add(p1);
     p2 = p1;
-    l1.Fields[width-1, height-1].Add(new Target());
+    l1.Fields[targetX, targetY].Add(new Target());
 }
 
 //Create and add walls
-for (int y = 0; y < 8; y++)
-    l1.Fields[1, y].Add(new Wall());
-    
-for (int y = 3; y < 9; y++)
-    l1.Fields[3, y].Add(new Wall());
-    
-for (int y = 0; y < 4; y++)
-    l1.Fields[10, y].Add(new Wall());
-    
-for (int y = 2; y < 5; y++)
-    l1.Fields[5, y].Add(new Wall());
-    
-for (int y = 1; y < 9; y++)
-    l1.Fields[13, y].Add(new Wall());
+VerticalWall(1, new(0, 7));
+VerticalWall(3, new(3, 8));
+VerticalWall(10, new(0, 3));
+VerticalWall(5, new(2, 4));
+VerticalWall(13, new(1, 8));
 
-for (int x = 3; x < 9; x++)
-    l1.Fields[x, 1].Add(new Wall());
+HorizontalWall(new(3, 8), 1);
+HorizontalWall(new(7, 8), 3);
+HorizontalWall(new(5, 12), 5);
+HorizontalWall(new(5, 11), 7);
 
-for (int x = 7; x < 9; x++)
-    l1.Fields[x, 3].Add(new Wall());
-
-for (int x = 5; x < 13; x++)
-    l1.Fields[x, 5].Add(new Wall());
-
-for (int x = 5; x < 12; x++)
-    l1.Fields[x, 7].Add(new Wall());
-
-l1.Fields[6, 8].Add(new Wall());
-
-l1.Fields[12, 3].Add(new Wall());
-
-l1.Fields[11, 1].Add(new Wall());
+SingleWall(6, 8);
+SingleWall(12, 3);
+SingleWall(11, 1);
 
 
 //Set key function
@@ -105,4 +95,21 @@ bool KeyFunction(ConsoleKey key)
     }
 
     return false;
+}
+
+void VerticalWall(int x, Tuple<int,int> yRange)
+{
+    for (int y = yRange.Item1; y <= yRange.Item2; y++)
+        l1.Fields[x, y].Add(new Wall());
+}
+
+void HorizontalWall(Tuple<int,int> xRange, int y)
+{
+    for (int x = xRange.Item1; x <= xRange.Item2; x++)
+        l1.Fields[x, y].Add(new Wall());
+}
+
+void SingleWall(int x, int y)
+{
+    l1.Fields[x, y].Add(new Wall());
 }
