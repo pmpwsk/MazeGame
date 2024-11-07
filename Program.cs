@@ -15,13 +15,26 @@ for (int y = 0; y < l1.Height; y++)
         l1.Fields[x, y].Add(new Background());
     }
 
-//Create and add player
-Player p1 = new Player(l1, 0, 0);
-l1.Fields[0, 0].Add(p1);
-
-//Create and add target
-l1.Fields[width-1, height-1].Add(new Target());
-
+//Game mode settings, player and target creation
+MovingThing p1, p2;
+if (args.Length > 0 && args[0] == "coop")
+{
+    MultiPlayer mp1 = new(l1, 0, 0);
+    mp1.SetContent(new(ConsoleColor.DarkBlue, "]["));
+    p1 = mp1;
+    l1.Fields[0, 0].Add(p1);
+    MultiPlayer mp2 = new(l1, width-1, height-1);
+    mp2.SetContent(new(ConsoleColor.DarkYellow, "]["));
+    p2 = mp2;
+    l1.Fields[width-1, height-1].Add(p2);
+}
+else
+{
+    p1 = new Player(l1, 0, 0);
+    l1.Fields[0, 0].Add(p1);
+    p2 = p1;
+    l1.Fields[width-1, height-1].Add(new Target());
+}
 
 //Create and add walls
 for (int y = 0; y < 8; y++)
@@ -81,6 +94,14 @@ bool KeyFunction(ConsoleKey key)
             return p1.MoveBy(0, -1);
         case ConsoleKey.S:
             return p1.MoveBy(0, 1);
+        case ConsoleKey.LeftArrow:
+            return p2.MoveBy(-1, 0);
+        case ConsoleKey.RightArrow:
+            return p2.MoveBy(1, 0);
+        case ConsoleKey.UpArrow:
+            return p2.MoveBy(0, -1);
+        case ConsoleKey.DownArrow:
+            return p2.MoveBy(0, 1);
     }
 
     return false;
