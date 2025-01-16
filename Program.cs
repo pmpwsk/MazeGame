@@ -13,7 +13,7 @@ int targetX = 14;
 int targetY = 8;
 
 //Create level object
-Level l1 = new(width, height, new List<Thing>[width, height]);
+Level l1 = new(width, height, width, height, new List<Thing>[width, height]);
 
 //Create fields with background
 for (int y = 0; y < l1.Height; y++)
